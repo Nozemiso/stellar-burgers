@@ -8,7 +8,7 @@ import { Outlet, useLocation, useParams } from 'react-router-dom';
 const modalRoot = document.getElementById('modals');
 
 export const Modal: FC<TModalProps> = memo(
-  ({ title, titleParamName, onClose, children }) => {
+  ({ title, titleParamName, onClose, children, stretched }) => {
     const idTitle = titleParamName ? useParams()[titleParamName] : undefined;
 
     useEffect(() => {
@@ -22,14 +22,21 @@ export const Modal: FC<TModalProps> = memo(
       };
     }, [onClose]);
 
-    return ReactDOM.createPortal(
+    const modalContent = (
       <>
-        <ModalUI title={idTitle ? '#' + idTitle : title} onClose={onClose}>
+        <ModalUI
+          stretched={stretched}
+          title={idTitle ? '#' + idTitle : title}
+          onClose={onClose}
+        >
           {children}
         </ModalUI>
         <Outlet />
-      </>,
-      modalRoot as HTMLDivElement
+      </>
     );
+
+    return stretched
+      ? modalContent
+      : ReactDOM.createPortal(modalContent, modalRoot as HTMLDivElement);
   }
 );

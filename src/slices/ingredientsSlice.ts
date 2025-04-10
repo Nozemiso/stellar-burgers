@@ -15,16 +15,7 @@ const initialState: TIngredientsState = {
 export const ingredientsSlice = createSlice({
   name: 'ingredientsSlice',
   initialState: initialState,
-  reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      state.ingredients.push(action.payload);
-    },
-    removeIngredient: (state, action: PayloadAction<TIngredient>) => {
-      state.ingredients = state.ingredients.filter(
-        (ingredient) => ingredient._id !== action.payload._id
-      );
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadIngredients.pending, (state, action) => {

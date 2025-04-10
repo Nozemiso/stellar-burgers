@@ -25,14 +25,12 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { loadIngredients } from '../../slices/ingredientsSlice';
 import { getUser } from '../../slices/userSlice';
+import { Preloader } from '@ui';
 
 function AppRouter() {
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
-
-  const feedOrders = useSelector((state) => state.feedSlice.orders);
-  const userOrders = useSelector((state) => state.userSlice.orders);
 
   return (
     <>
@@ -90,6 +88,33 @@ function AppRouter() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <Modal
+              stretched
+              title={'Детали ингредиента'}
+              onClose={() => {
+                navigate(-1);
+              }}
+              children={<IngredientDetails />}
+            />
+          }
+        />
+        <Route
+          path='/feed/:number'
+          element={
+            <Modal
+              stretched
+              title=''
+              titleParamName='number'
+              onClose={() => {
+                navigate(-1);
+              }}
+              children={<OrderInfo />}
+            />
+          }
+        />
       </Routes>
       {background && (
         <Routes>
@@ -114,7 +139,7 @@ function AppRouter() {
                 onClose={() => {
                   navigate(-1);
                 }}
-                children={<OrderInfo orders={feedOrders} />}
+                children={<OrderInfo />}
               />
             }
           />
@@ -127,7 +152,7 @@ function AppRouter() {
                 onClose={() => {
                   navigate(-1);
                 }}
-                children={<OrderInfo orders={userOrders} />}
+                children={<OrderInfo />}
               />
             }
           />
@@ -139,6 +164,7 @@ function AppRouter() {
 
 const App = () => {
   const dispatch = useDispatch();
+  const isAuthChecked = useSelector((state) => state.userSlice.isAuthChecked);
 
   useEffect(() => {
     dispatch(loadIngredients());
@@ -148,7 +174,7 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <AppRouter />
+      {isAuthChecked ? <AppRouter /> : <Preloader />}
     </div>
   );
 };

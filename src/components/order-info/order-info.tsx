@@ -1,20 +1,23 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getOrderByNumberApi } from '@api';
+import { navigate } from '@storybook/addon-links';
 
-type OrderInfoProps = {
-  orders: TOrder[];
-};
-
-export const OrderInfo: FC<OrderInfoProps> = ({ orders }) => {
+export const OrderInfo: FC = () => {
   const number = useParams().number;
+  const [orderData, setOrderData] = useState<TOrder | null>(null);
+  const navigate = useNavigate();
 
-  const orderData = useSelector((store) =>
-    orders.find((order) => order.number.toString() == number)
-  );
+  useEffect(() => {
+    getOrderByNumberApi(Number.parseInt(number || '0')).then((res) => {
+      if (res.orders[0]) setOrderData(res.orders[0]);
+      else navigate('/not-found');
+    });
+  }, []);
 
   const ingredients: TIngredient[] = useSelector(
     (store) => store.ingredientsSlice.ingredients
