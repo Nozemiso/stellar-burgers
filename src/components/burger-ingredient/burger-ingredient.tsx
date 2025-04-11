@@ -16,7 +16,10 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const handleAdd = () => {
       if (ingredient.type === 'bun')
         dispatch(constructorSlice.actions.setBuns(ingredient));
-      else dispatch(constructorSlice.actions.addIngredient({ ...ingredient, id: v4()}));
+      else
+        dispatch(
+          constructorSlice.actions.addIngredient({ ...ingredient, id: v4() })
+        );
     };
 
     return (
