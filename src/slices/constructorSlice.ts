@@ -1,16 +1,11 @@
-import { TIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '@api';
 import { getOrders } from './userSlice';
 
-type TUniqueIngredient = {
-  ingredient: TIngredient;
-  uuid: string;
-};
-
 type TBurgerEditorSlice = {
   bun: TIngredient | null;
-  ingredients: TIngredient[];
+  ingredients: TConstructorIngredient[];
   orderAvailable: boolean;
   orderResult: TOrder | null;
 };
@@ -26,7 +21,7 @@ export const constructorSlice = createSlice({
   name: 'burgerEditorSlice',
   initialState: initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
+    addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
       state.ingredients.push(action.payload);
     },
     removeIngredient: (state, action: PayloadAction<number>) => {

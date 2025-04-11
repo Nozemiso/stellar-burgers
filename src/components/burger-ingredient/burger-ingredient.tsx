@@ -6,6 +6,7 @@ import { TBurgerIngredientProps } from './type';
 import store, { useDispatch } from '../../services/store';
 import { rootReducer } from '../../services/rootReducer';
 import { constructorSlice } from '../../slices/constructorSlice';
+import { v4 } from 'uuid';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
@@ -15,7 +16,7 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const handleAdd = () => {
       if (ingredient.type === 'bun')
         dispatch(constructorSlice.actions.setBuns(ingredient));
-      else dispatch(constructorSlice.actions.addIngredient(ingredient));
+      else dispatch(constructorSlice.actions.addIngredient({ ...ingredient, id: v4()}));
     };
 
     return (

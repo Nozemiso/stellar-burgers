@@ -57,6 +57,7 @@ export const userSlice = createSlice({
       .addCase(logout.rejected, (state, action) => {})
       .addCase(logout.fulfilled, (state, action) => {
         Object.assign(state, initialState);
+        state.isAuthChecked = true;
       })
 
       .addCase(getOrders.rejected, (state, action) => {
